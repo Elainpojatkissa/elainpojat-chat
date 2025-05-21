@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #e6f2ff;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #cce6ff;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.contact {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #b3daff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact:hover {
+  background-color: #99ccff;
+}
+
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f0f8ff;
+  padding: 10px;
+  border: 1px solid #99ccff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#messages div {
+  margin: 5px 0;
+  padding: 5px 10px;
+  background-color: #d6ecff;
+  border-radius: 6px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.controls input, .controls button {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
