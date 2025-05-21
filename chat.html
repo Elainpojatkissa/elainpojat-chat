@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Chat</title>
-</head>
+<head><title>Chat</title></head>
 <body>
-  <h2>Welcome to the Chat</h2>
-  <p>Logged in as: <span id="loggedInUser"></span></p>
-
-  <form id="sendMessageForm">
-    <input type="text" id="receiver" placeholder="Receiver username" required>
-    <input type="text" id="message" placeholder="Your message" required>
-    <button type="submit">Send</button>
-  </form>
-
-  <h3>Messages</h3>
-  <div id="messages"></div>
-
+  <h2 id="welcome">Welcome!</h2>
+  <div>
+    <input type="text" id="toUser" placeholder="Send to username" />
+    <input type="text" id="message" placeholder="Message" />
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+  <div id="messages" style="margin-top:20px;"></div>
   <script src="main.js"></script>
 </body>
 </html>
