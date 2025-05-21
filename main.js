@@ -1,4 +1,4 @@
-const API_URL = "https://your-backend-name.repl.co"; // <- replace with your actual backend
+const API_URL = "https://elainpojat-chat-backend.onrender.com"; // <- replace with your actual backend
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('loginForm')) {
