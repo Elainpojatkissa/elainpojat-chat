@@ -80,7 +80,8 @@ function sendMessage() {
     .then(data => {
       if (data.success) {
         document.getElementById("message").value = "";
-        loadMessages();
+        currentContact = to; // ✅ Set current contact
+        loadMessages();       // ✅ Load updated messages
       } else {
         alert(data.message);
       }
@@ -91,6 +92,7 @@ function sendMessage() {
     });
 }
 
+
 function loadMessages() {
   const username = localStorage.getItem("username");
   fetch(API_URL + "/messages/" + username)
@@ -98,6 +100,18 @@ function loadMessages() {
     .then(messages => {
       allMessages = messages;
       updateContacts();
+
+      if (!currentContact && allMessages.length > 0) {
+        // Automatically pick the first contact
+        const msg = allMessages.find(
+          m => m.from !== username || m.to !== username
+        );
+        if (msg) {
+          currentContact = msg.from === username ? msg.to : msg.from;
+          document.getElementById("toUser").value = currentContact;
+        }
+      }
+
       showMessages(currentContact);
     });
 }
@@ -129,6 +143,7 @@ function showMessages(withUser) {
   const username = localStorage.getItem("username");
   const msgBox = document.getElementById("messages");
   msgBox.innerHTML = "";
+  console.log("Showing messages with", withUser);
 
   allMessages
     .filter(msg =>
