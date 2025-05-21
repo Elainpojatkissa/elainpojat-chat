@@ -44,11 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const sender = localStorage.getItem('username');
       const receiver = document.getElementById('receiver').value;
       const message = document.getElementById('message').value;
-      await fetch(`${API_URL}/send`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ sender, receiver, message })
-      });
+    fetch(API_URL + "/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ from, to, message })
+})
+
       loadMessages();
     };
 
