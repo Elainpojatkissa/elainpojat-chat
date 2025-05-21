@@ -20,12 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function register() {
   const username = document.getElementById("registerUsername").value.trim();
-  if (!username) return alert("Username required.");
+  const password = document.getElementById("registerPassword").value;
+  if (!username || !password) return alert("Username and password required.");
 
   fetch(API_URL + "/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username })
+    body: JSON.stringify({ username, password })
   })
     .then(res => res.json())
     .then(data => {
@@ -40,12 +41,13 @@ function register() {
 
 function login() {
   const username = document.getElementById("loginUsername").value.trim();
-  if (!username) return alert("Username required.");
+  const password = document.getElementById("loginPassword").value;
+  if (!username || !password) return alert("Username and password required.");
 
   fetch(API_URL + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username })
+    body: JSON.stringify({ username, password })
   })
     .then(res => res.json())
     .then(data => {
