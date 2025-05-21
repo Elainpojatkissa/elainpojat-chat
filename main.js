@@ -1,5 +1,8 @@
 const API_URL = "https://elainpojat-chat-backend.onrender.com";
 
+let currentContact = null;
+let allMessages = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   const username = localStorage.getItem("username");
   if (!username && location.pathname.endsWith("chat.html")) {
@@ -7,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (username && location.pathname.endsWith("index.html")) {
     location.href = "chat.html";
   }
+
   if (location.pathname.endsWith("chat.html")) {
     document.getElementById("welcome").textContent = `Welcome, ${username}!`;
     loadMessages();
@@ -16,10 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function register() {
   const username = document.getElementById("registerUsername").value.trim();
-  if (!username) {
-    alert("Username cannot be empty.");
-    return;
-  }
+  if (!username) return alert("Username required.");
 
   fetch(API_URL + "/register", {
     method: "POST",
@@ -29,7 +30,7 @@ function register() {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        alert("Registered! Now log in.");
+        alert("Registered! You can now log in.");
         location.href = "index.html";
       } else {
         alert(data.message);
@@ -39,10 +40,7 @@ function register() {
 
 function login() {
   const username = document.getElementById("loginUsername").value.trim();
-  if (!username) {
-    alert("Username cannot be empty.");
-    return;
-  }
+  if (!username) return alert("Username required.");
 
   fetch(API_URL + "/login", {
     method: "POST",
@@ -60,15 +58,16 @@ function login() {
     });
 }
 
+function logout() {
+  localStorage.removeItem("username");
+  location.href = "index.html";
+}
+
 function sendMessage() {
   const from = localStorage.getItem("username");
   const to = document.getElementById("toUser").value.trim();
   const message = document.getElementById("message").value.trim();
-
-  if (!to || !message) {
-    alert("Please enter both receiver and message.");
-    return;
-  }
+  if (!to || !message) return alert("Enter receiver and message.");
 
   fetch(API_URL + "/send", {
     method: "POST",
@@ -81,12 +80,12 @@ function sendMessage() {
         document.getElementById("message").value = "";
         loadMessages();
       } else {
-        alert("Error: " + data.message);
+        alert(data.message);
       }
     })
     .catch(err => {
       console.error("Send failed:", err);
-      alert("Message failed. Is the backend online?");
+      alert("Message failed.");
     });
 }
 
@@ -95,17 +94,50 @@ function loadMessages() {
   fetch(API_URL + "/messages/" + username)
     .then(res => res.json())
     .then(messages => {
-      const msgBox = document.getElementById("messages");
-      msgBox.innerHTML = "";
-      messages.forEach(msg => {
-        const div = document.createElement("div");
-        div.textContent = `${msg.from}: ${msg.message}`;
-        msgBox.appendChild(div);
-      });
+      allMessages = messages;
+      updateContacts();
+      showMessages(currentContact);
     });
 }
 
-function logout() {
-  localStorage.removeItem("username");
-  location.href = "index.html";
+function updateContacts() {
+  const username = localStorage.getItem("username");
+  const contacts = new Set();
+  allMessages.forEach(msg => {
+    if (msg.from !== username) contacts.add(msg.from);
+    if (msg.to !== username) contacts.add(msg.to);
+  });
+
+  const contactList = document.getElementById("contactList");
+  contactList.innerHTML = "";
+  Array.from(contacts).sort().forEach(name => {
+    const div = document.createElement("div");
+    div.className = "contact";
+    div.textContent = name;
+    div.onclick = () => {
+      currentContact = name;
+      document.getElementById("toUser").value = name;
+      showMessages(name);
+    };
+    contactList.appendChild(div);
+  });
+}
+
+function showMessages(withUser) {
+  const username = localStorage.getItem("username");
+  const msgBox = document.getElementById("messages");
+  msgBox.innerHTML = "";
+
+  allMessages
+    .filter(msg =>
+      (msg.from === username && msg.to === withUser) ||
+      (msg.to === username && msg.from === withUser)
+    )
+    .forEach(msg => {
+      const div = document.createElement("div");
+      div.textContent = `${msg.from}: ${msg.message}`;
+      msgBox.appendChild(div);
+    });
+
+  msgBox.scrollTop = msgBox.scrollHeight;
 }
