@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head><title>Register</title></head>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <h2>Register</h2>
-  <input type="text" id="registerUsername" placeholder="Username" />
-  <button onclick="register()">Register</button>
-  <p>Already have an account? <a href="index.html">Login</a></p>
+  <div class="chat-area">
+    <h2>Register</h2>
+    <input type="text" id="registerUsername" placeholder="Username" /><br /><br />
+    <input type="password" id="registerPassword" placeholder="Password" /><br /><br />
+    <button onclick="register()">Register</button><br /><br />
+    <a href="index.html">Back to login</a>
+  </div>
   <script src="main.js"></script>
 </body>
 </html>
